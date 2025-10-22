@@ -37,7 +37,7 @@
           ]
         }
       ],
-      "icon": "assets/icon.png",
+      "icon": "assets/images/icon.png",
       "verifyUpdateCodeSignature": false,
       "artifactName": "${productName}-Installer-${arch}.exe"
     },
