@@ -1,14 +1,19 @@
 {
   "name": "notification",
   "version": "1.0.0",
-  "description": "",
+  "description": "Aplicacion para mostrar notificaciones de windows enviadas desde un servidor socket.io",
   "main": "main.js",
   "scripts": {
     "start": "electron ./",
     "build-win": "electron-builder --win",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "keywords": [
+    "electron",
+    "notificaciones",
+    "socket",
+    "bulma"
+  ],
   "author": "gilbertbv",
   "license": "ISC",
   "devDependencies": {
