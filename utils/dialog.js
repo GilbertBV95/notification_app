@@ -1,6 +1,7 @@
-const { dialog, Notification, nativeImage } = require("electron/main")
-const { join } = require('node:path');
+const { dialog, Notification } = require("electron/main")
+const { selectIcon } = require("./select-icon");
 
+//MOSTRAR MENSAJE EN LA PANTALLA
 const showMessage = ({ message, type = 'info', title, detail, buttons = ['OK'] }) => {
 	return dialog.showMessageBox(null, {
 		type,
@@ -12,6 +13,7 @@ const showMessage = ({ message, type = 'info', title, detail, buttons = ['OK'] }
 	})
 }
 
+//MOSTRAR NOTIFICACION EN LA PANTALLA
 const showNotification = ({ title, message, type = 'info' }) => {
 	if (Notification.isSupported())
 		new Notification({
@@ -19,35 +21,6 @@ const showNotification = ({ title, message, type = 'info' }) => {
 		}).show();
 	else
 		showMessage({ title, message, type })
-}
-
-const selectIcon = (type) => {
-	const icons = {
-		warning: join(`${__dirname}`, '../assets', 'warning_x256.png'),
-		info: join(`${__dirname}`, '../assets', 'info_x256.png'),
-		error: join(`${__dirname}`, '../assets', 'error_x256.png'),
-		none: 'none'
-	}
-
-	return nativeImage.createFromPath(icons[type]) || 'none'
-}
-
-function showDialogTypes() {
-	const dialogTypes = [
-		'none',     // Sin icono
-		'info',     // ℹ️ Información
-		'error',    // ❌ Error
-		'question', // ❓ Pregunta
-		'warning'   // ⚠️ Advertencia
-	]
-
-	dialogTypes.forEach(type => {
-		showMessage({
-			message: `Este es un diálogo de tipo ${type}`,
-			type,
-			title: `Tipo: ${type}`
-		})
-	})
 }
 
 module.exports = { showMessage, showNotification }

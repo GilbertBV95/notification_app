@@ -1,24 +1,36 @@
 require('dotenv').config();
-const { app, Tray, Menu } = require('electron/main');
+const { app, dialog, ipcMain } = require('electron/main');
 const { checkIfAsSingleApp } = require('./utils/check-unique-app');
-const { closeApp } = require('./utils/close-app');
+const { createTray } = require('./src/tray');
+const { execCommand } = require('./utils/exec');
+const { initSocketConnection } = require('./src/socket');
+const { showMessage } = require('./utils/dialog');
+const { closeWindows } = require('./utils/close-app');
 
-function createTray() {
-	const tray = new Tray(process.env.ICON_PATH)
-	const contextMenu = Menu.buildFromTemplate([
-		{
-			label: 'Estado: Esperando datos...',
-			enabled: false,
-			id: 'status'
-		},
-		{ type: 'separator' },
-		{ label: 'Cerrar', click: () => closeApp(app) },
-	])
-	tray.setToolTip('Notification App')
-	tray.setContextMenu(contextMenu)
+let tray;
+
+const handleSetConfig = async (_, data) => {
+	const { server, port } = data;
+	const command = `SETX SERVER_ADDRESS ${server} && SETX SERVER_PORT ${port}`;
+	const result = await execCommand(command);
+	const { success } = result;
+
+	if (success) {
+		initSocketConnection();
+		closeWindows();
+		showMessage({ message: 'Configuración realizada correctamente' });
+	} else dialog.showErrorBox('Error', 'Error al realizar la configuración')
+
+	return success;
 }
 
-app.setAppUserModelId('Notification Application');
+app.setAppUserModelId(process.env.USER_MODEL_ID || 'Notification Application');
 app.whenReady()
 	.then(() => checkIfAsSingleApp(app))
-	.then(() => createTray())
+	.then(() => ipcMain.handle('set-config', handleSetConfig))
+	.then(() => tray = createTray(app))
+	.catch(err => dialog.showErrorBox('Error', err.message))
+
+app.on('window-all-closed', () => {
+	return true;
+})

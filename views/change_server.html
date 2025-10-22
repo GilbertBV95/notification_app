@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Configurar Servidor</title>
+	<link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
+	<link rel="stylesheet" href="../assets/css/style.css">
+</head>
+
+<body>
+	<section class="section">
+		<div class="container">
+			<div class="form-container">
+				<h1 class="title is-3 has-text-centered">Configuración</h1>
+				<p class="subtitle is-6 has-text-centered mb-5">Complete los campos requeridos</p>
+
+				<form id="configForm">
+					<div class="field is-horizontal">
+						<div class="field-body">
+							<!-- Server input -->
+							<div class="field">
+								<label class="label">Servidor</label>
+								<div class="control">
+									<input class="input" type="text" placeholder="Ej: localhost" id="serverInput">
+								</div>
+								<p class="help">Dirección del servidor</p>
+								<article id="serverError" class="message is-danger hidden">
+									<div class="message-body">
+										Este campo es obligatorio
+									</div>
+								</article>
+							</div>
+
+							<!-- Port input -->
+							<div class="field">
+								<label class="label">Puerto</label>
+								<div class="control">
+									<input class="input" type="number" placeholder="Ej: 3000" id="portInput">
+								</div>
+								<p class="help">Puerto de conexión</p>
+								<article id="portError" class="message is-danger hidden">
+									<div class="message-body">
+										Este campo es obligatorio
+									</div>
+								</article>
+							</div>
+						</div>
+					</div>
+
+					<div class="field">
+						<div class="button-container">
+							<button id="btn-submit" type="submit" class="button is-link is-outlined is-medium">
+								<span class="icon">
+									<i class="fas fa-save"></i>
+								</span>
+								<span>Guardar Configuración</span>
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<script src="../assets/scripts/renderer.js"></script>
+</body>
+
+</html>

@@ -1,5 +1,13 @@
+const { BrowserWindow } = require("electron/main");
+
 function closeApp(app) {
 	app.quit();
 }
 
-module.exports = { closeApp }
+const closeWindows = () => {
+	const windows = BrowserWindow.getAllWindows();
+	if (windows.length)
+		windows[0].close();
+}
+
+module.exports = { closeApp, closeWindows }
