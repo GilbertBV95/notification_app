@@ -14,7 +14,7 @@ function checkIfAsSingleApp(app) {
 		}).catch(err => {
 			dialog.showErrorBox('Error', err.message)
 		})
-	} else initSocketConnection();
+	} else initSocketConnection({});
 }
 
 

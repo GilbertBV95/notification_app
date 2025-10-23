@@ -5,7 +5,7 @@ const { promisify } = require('node:util');
 const execCommand = async (command = 'net session') => {
 	try {
 		const d = promisify(exec);
-		const { stderr, stdout } = await d(command)
+		const { stderr, stdout } = await d(command);
 
 		if (stderr) return { success: false };
 

@@ -7,13 +7,11 @@ const { execCommand } = require('../utils/exec');
 let socket;
 const ip = getIp();
 
-const initSocketConnection = async () => {
-	const server = await execCommand('echo %SERVER_ADDRESS%');
-	const port = await execCommand('echo %SERVER_PORT%');
-	const serverDir = server?.stdout?.trim();
-	const portDir = port?.stdout?.trim();
-	const s = `${serverDir || process.env.SERVER_ADDRESS}` || 'localhost',
-		p = `${portDir || process.env.SERVER_PORT}` || 3000;
+const initSocketConnection = async ({ server = 'localhost', port = 3000, defecto = true }) => {
+	const serverDir = await execCommand('echo %SERVER_ADDRESS%')?.stdout?.trim();
+	const portDir = await execCommand('echo %SERVER_PORT%')?.stdout?.trim();
+	const s = defecto ? `${serverDir || process.env.SERVER_ADDRESS}` || server : server || `${serverDir || process.env.SERVER_ADDRESS}`;
+	const p = defecto ? `${portDir || process.env.SERVER_PORT}` || port : port || `${portDir || process.env.SERVER_PORT}`;
 
 	if (socket) socket.disconnect();
 

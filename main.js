@@ -16,7 +16,7 @@ const handleSetConfig = async (_, data) => {
 	const { success } = result;
 
 	if (success) {
-		initSocketConnection();
+		initSocketConnection({ ...data, defecto: false });
 		closeWindows();
 		showMessage({ message: 'Configuración realizada correctamente' });
 	} else dialog.showErrorBox('Error', 'Error al realizar la configuración')

@@ -4,9 +4,16 @@ document.getElementById('configForm').addEventListener('submit', async (e) => {
 	const port = document.getElementById('portInput').value;
 	const serverError = document.getElementById('serverError');
 	const portError = document.getElementById('portError');
-	const bnt = document.getElementById('btn-submit');
+	const btn = document.getElementById('btn-submit');
 
 	const numberRegEx = /[0-9]+/
+	btn.classList.add('is-loading');
+	btn.disabled = true;
+
+	let error, changed;
+
+	if (!server || !port) error = true;
+	else error = false;
 
 	if (!server) serverError.classList.remove('hidden');
 	else serverError.classList.add('hidden');
@@ -15,14 +22,16 @@ document.getElementById('configForm').addEventListener('submit', async (e) => {
 	if (!port || !numberRegEx.test(port)) portError.classList.remove('hidden');
 	else portError.classList.add('hidden');
 
+	if (error) removeStates(btn);
+
 	if (server && port) {
-		const changed = await window.updateConfig.setConfig({ server, port });
-		bnt.classList.add('is-loading');
-		bnt.diabled = true;
+		changed = await window.updateConfig.setConfig({ server, port });
 
-		if (changed)
-			bnt.classList.remove('is-loading');
-
-		bnt.diabled = false;
+		if (changed) removeStates(btn);
 	}
 });
+
+const removeStates = (btn) => {
+	btn.classList.remove('is-loading');
+	btn.disabled = false;
+}

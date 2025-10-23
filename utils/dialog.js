@@ -2,7 +2,7 @@ const { dialog, Notification } = require("electron/main")
 const { selectIcon } = require("./select-icon");
 
 //MOSTRAR MENSAJE EN LA PANTALLA
-const showMessage = ({ message, type = 'info', title, detail, buttons = ['OK'] }) => {
+const showMessage = ({ message, type = 'info', title = 'Información', detail, buttons = ['OK'] }) => {
 	return dialog.showMessageBox(null, {
 		type,
 		message,
