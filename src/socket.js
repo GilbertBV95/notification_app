@@ -12,10 +12,12 @@ const initSocketConnection = async () => {
 	const port = await execCommand('echo %SERVER_PORT%');
 	const serverDir = server?.stdout?.trim();
 	const portDir = port?.stdout?.trim();
+	const s = `${serverDir || process.env.SERVER_ADDRESS}` || 'localhost',
+		p = `${portDir || process.env.SERVER_PORT}` || 3000;
 
 	if (socket) socket.disconnect();
 
-	socket = io(`http://${serverDir || process.env.SERVER_ADDRESS}:${portDir || process.env.SERVER_PORT}`);
+	socket = io(`http://${s}:${p}`);
 	socket.on('connect', () => {
 		solicitarCredenciales();
 	})
@@ -44,7 +46,7 @@ const solicitarCredenciales = () => {
 	}, (res) => {
 		if (res.success) {
 			showNotification({
-				message: 'Haz recuperado la conexión', title: 'Información', type: 'info'
+				message: 'Haz recuperado la conexión', title: 'Información'
 			});
 			updateMenu('connect', 'online');
 		}

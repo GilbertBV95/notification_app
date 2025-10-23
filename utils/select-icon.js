@@ -2,7 +2,7 @@ const { nativeImage } = require("electron/common");
 const { join } = require('node:path');
 
 const selectIcon = (type) => {
-	const path = '../assets/images'
+	const path = '../assets/images';
 	const icons = {
 		warning: join(`${__dirname}`, path, 'warning_x128.png'),
 		info: join(`${__dirname}`, path, 'info_x128.png'),
@@ -12,7 +12,7 @@ const selectIcon = (type) => {
 		online: join(`${__dirname}`, path, 'online_x16.png'),
 		exit: join(`${__dirname}`, path, 'exit_x16.png'),
 		server: join(`${__dirname}`, path, 'server_x16.png'),
-		icon: join(`${__dirname}`, path, process.env.ICON),
+		icon: join(`${__dirname}`, path, process.env.ICON || 'ico.ico' || 'icon.ico'),
 		none: 'none'
 	}
 
