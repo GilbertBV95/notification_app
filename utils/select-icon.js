@@ -13,7 +13,7 @@ const selectIcon = (type, app, string = false) => {
 		exit: 'exit_x16.png',
 		server: 'server_x16.png',
 		config: 'configuration_x16.png',
-		icon: process.env.ICON || 'ico.ico' || 'icon.ico',
+		icon: process.env.ICON || 'icon.ico',
 		none: 'none'
 	}
 

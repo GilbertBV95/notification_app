@@ -7,7 +7,7 @@ function checkIfAsSingleApp(app) {
 	if (!app.requestSingleInstanceLock()) {
 		showMessage({
 			type: 'warning',
-			title: process.env.USER_MODEL_ID || 'Notification App',
+			title: 'Notification App',
 			message: 'La aplicación de alertas ya se está ejecutando',
 		}).then((res) => {
 			if (res.response === 0) closeApp(app);

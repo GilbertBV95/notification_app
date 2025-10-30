@@ -1,5 +1,5 @@
 node_modules
 dist
 .env
-assets/images/icon.png
-assets/images/ico.ico
+assets/images/icon.mine.png
+assets/images/ico.mine.ico

@@ -25,7 +25,7 @@ const handleSetConfig = async (_, data) => {
 	return success;
 }
 
-app.setAppUserModelId(process.env.USER_MODEL_ID || 'gilbertbv.notification.app');
+app.setAppUserModelId('gilbertbv.notification.app');
 app.whenReady()
 	.then(() => checkIfAsSingleApp(app))
 	.then(() => ipcMain.handle('set-config', handleSetConfig))

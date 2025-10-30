@@ -15,7 +15,7 @@
 		"socket.io",
 		"bulma"
 	],
-	"author": "gilbertbv",
+	"author": "GilbertBV95",
 	"license": "ISC",
 	"devDependencies": {
 		"electron": "^38.3.0",
