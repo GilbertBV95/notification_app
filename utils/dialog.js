@@ -1,7 +1,7 @@
-const { dialog, Notification } = require("electron/main")
+const { dialog, Notification } = require("electron/main");
 const { selectIcon } = require("./select-icon");
 
-//MOSTRAR MENSAJE EN LA PANTALLA
+//MOSTRAR POPUPS EN LA PANTALLA
 const showMessage = ({ message, type = 'info', title = 'Información', detail, buttons = ['OK'] }) => {
 	return dialog.showMessageBox(null, {
 		type,
@@ -14,11 +14,24 @@ const showMessage = ({ message, type = 'info', title = 'Información', detail, b
 }
 
 //MOSTRAR NOTIFICACION EN LA PANTALLA
-const showNotification = ({ title, message, type = 'info' }) => {
-	if (Notification.isSupported())
+const showNotification = ({ title, message, type = 'info', app }) => {
+	if (Notification.isSupported()) {
+		const imagen = `file:///${selectIcon(type, app, true)}`.replace(/\\/g, '/');
+		const toastXmlString = `
+		<toast>
+			<visual>
+				<binding template="ToastGeneric">
+					<image placement="appLogoOverride" src="${imagen}"/>
+					<text id="1">${title}</text>
+					<text id="2">${message}</text>
+				</binding>
+			</visual>
+		</toast>`
+
 		new Notification({
-			title, body: message, icon: selectIcon(type)
+			toastXml: toastXmlString
 		}).show();
+	}
 	else
 		showMessage({ title, message, type })
 }

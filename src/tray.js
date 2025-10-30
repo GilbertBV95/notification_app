@@ -2,13 +2,18 @@ const { Tray, Menu, BrowserWindow } = require('electron/main')
 const { selectIcon } = require('../utils/select-icon');
 const { execCommand } = require('../utils/exec');
 const { join } = require('node:path');
+const { choiceServerConfig } = require('../utils/choice-server-config');
+
+let previousServerString;
 
 //CREA EL ICONO DE LA APLICACION
 const createTray = async () => {
 	tray = new Tray(selectIcon('icon'));
 
-	tray.setToolTip(process.env.USER_MODEL_ID || 'Notification App');
-	await updateMenu('disconnect');
+	const { s, p } = await choiceServerConfig(true);
+	const serverString = `${s}:${p}`;
+	tray.setToolTip('Notification App');
+	updateMenu('disconnect', 'offline', serverString);
 
 	tray.addListener('click', () => {
 		tray.popUpContextMenu();
@@ -16,8 +21,17 @@ const createTray = async () => {
 }
 
 //ACTUALIZAR EL MENU EL TRAY
-const updateMenu = async (state, icon = 'offline') => {
-	const contextMenu = Menu.buildFromTemplate([
+const updateMenu = async (state, icon = 'offline', serverString) => {
+	previousServerString = serverString ? serverString : previousServerString
+
+	const menuItems = [
+		{
+			label: `Servidor ${previousServerString}`,
+			enabled: false,
+			id: 'server',
+			icon: selectIcon('server')
+		},
+		{ type: 'separator' },
 		{
 			label: `Estado: ${getLabelForState(state)}`,
 			enabled: false,
@@ -30,7 +44,7 @@ const updateMenu = async (state, icon = 'offline') => {
 			toolTip: `Server`,
 			enabled: (await execCommand()).success,
 			id: 'server',
-			icon: selectIcon('server'),
+			icon: selectIcon('config'),
 			click: () => { openChangeServerWindow() }
 		},
 		{ type: 'separator' },
@@ -39,7 +53,9 @@ const updateMenu = async (state, icon = 'offline') => {
 			role: 'quit',
 			icon: selectIcon('exit')
 		},
-	])
+	];
+
+	const contextMenu = Menu.buildFromTemplate(menuItems)
 	tray.setContextMenu(contextMenu);
 }
 

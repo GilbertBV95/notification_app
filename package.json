@@ -1,59 +1,80 @@
 {
-  "name": "notification",
-  "version": "1.0.0",
-  "description": "Aplicacion para mostrar notificaciones de windows enviadas desde un servidor socket.io",
-  "main": "main.js",
-  "scripts": {
-    "start": "electron ./",
-    "build-win": "electron-builder --win",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [
-    "electron",
-    "notificaciones",
-    "socket",
-    "bulma"
-  ],
-  "author": "gilbertbv",
-  "license": "ISC",
-  "devDependencies": {
-    "electron": "^38.3.0",
-    "electron-builder": "^26.0.12"
-  },
-  "build": {
-    "appId": "gilbertbv.notification.app",
-    "productName": "Notification App",
-    "copyright": "Copyright © 2025 ${author}",
-    "directories": {
-      "output": "dist"
-    },
-    "win": {
-      "target": [
-        {
-          "target": "nsis",
-          "arch": [
-            "x64",
-            "ia32"
-          ]
-        }
-      ],
-      "icon": "assets/images/icon.png",
-      "verifyUpdateCodeSignature": false,
-      "artifactName": "${productName}-Installer-${arch}.exe"
-    },
-    "nsis": {
-      "oneClick": false,
-      "perMachine": true,
-      "allowElevation": true,
-      "allowToChangeInstallationDirectory": true,
-      "createDesktopShortcut": true,
-      "createStartMenuShortcut": true,
-      "shortcutName": "Notification App"
-    }
-  },
-  "dependencies": {
-    "bulma": "^1.0.4",
-    "dotenv": "^17.2.3",
-    "socket.io-client": "^4.8.1"
-  }
+	"name": "notification_app",
+	"version": "1.0.1",
+	"description": "Aplicacion para mostrar notificaciones de windows enviadas desde un servidor socket.io",
+	"main": "main.js",
+	"scripts": {
+		"start": "electron .",
+		"build-win": "electron-builder --win",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"nodejs",
+		"electron",
+		"notificaciones windows",
+		"socket.io",
+		"bulma"
+	],
+	"author": "gilbertbv",
+	"license": "ISC",
+	"devDependencies": {
+		"electron": "^38.3.0",
+		"electron-builder": "^26.0.12"
+	},
+	"build": {
+		"appId": "gilbertbv.notification.app",
+		"productName": "Notification App",
+		"copyright": "Copyright © 2025 ${author}",
+		"directories": {
+			"output": "dist"
+		},
+		"files": [
+			"**/*",
+			"!assets/sources/**/*",
+			"!**/*.md",
+			"!**/node_modules/**/*.{log,md,txt}",
+			"!**/*.{iml,o,hprof,orig,pyc,pyo,rbc,swp}"
+		],
+		"extraResources": [
+			{
+				"from": "assets/images",
+				"to": "assets/images",
+				"filter": [
+					"**/*.png",
+					"**/*.ico",
+					"**/*.icns",
+					"**/*.jpg",
+					"**/*.jpeg"
+				]
+			}
+		],
+		"win": {
+			"target": [
+				{
+					"target": "nsis",
+					"arch": [
+						"x64",
+						"ia32"
+					]
+				}
+			],
+			"icon": "assets/images/icon.png",
+			"verifyUpdateCodeSignature": false,
+			"artifactName": "${productName}-Installer-${arch}.exe"
+		},
+		"nsis": {
+			"oneClick": false,
+			"perMachine": true,
+			"allowElevation": true,
+			"allowToChangeInstallationDirectory": true,
+			"createDesktopShortcut": true,
+			"createStartMenuShortcut": true,
+			"shortcutName": "Notification App"
+		}
+	},
+	"dependencies": {
+		"bulma": "^1.0.4",
+		"dotenv": "^17.2.3",
+		"socket.io-client": "^4.8.1"
+	}
 }

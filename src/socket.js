@@ -2,49 +2,58 @@ const { io } = require('socket.io-client');
 const { getIp } = require('../utils/ip-information');
 const { showNotification } = require('../utils/dialog');
 const { updateMenu } = require('./tray');
-const { execCommand } = require('../utils/exec');
+const { choiceServerConfig } = require('../utils/choice-server-config.js');
 
 let socket;
 const ip = getIp();
 
-const initSocketConnection = async ({ server = 'localhost', port = 3000, defecto = true }) => {
-	const serverDir = await execCommand('echo %SERVER_ADDRESS%')?.stdout?.trim();
-	const portDir = await execCommand('echo %SERVER_PORT%')?.stdout?.trim();
-	const s = defecto ? `${serverDir || process.env.SERVER_ADDRESS}` || server : server || `${serverDir || process.env.SERVER_ADDRESS}`;
-	const p = defecto ? `${portDir || process.env.SERVER_PORT}` || port : port || `${portDir || process.env.SERVER_PORT}`;
+// INICIALIZAR CONEXION CON EL SERVIDOR
+const initSocketConnection = async ({
+	server = 'localhost',
+	port = 3000,
+	defecto = true, app
+}) => {
+	const { s, p } = await choiceServerConfig(defecto, server, port);
+	const serverString = `${s}:${p}`;
 
-	if (socket) socket.disconnect();
+	if (socket) {
+		socket.disconnect();
+		updateMenu('disconnect', 'offline', serverString)
+	}
 
-	socket = io(`http://${s}:${p}`);
+	socket = io(`http://${serverString}`);
 	socket.on('connect', () => {
-		solicitarCredenciales();
+		solicitarCredenciales(app);
 	})
 
 	socket.on('disconnect', () => {
 		showNotification({
-			message: 'Haz perdido la conexión con el servidor', title: 'Información', type: 'warning'
+			message: 'Haz perdido la conexión con el servidor', title: 'Información', type: 'warning', app
 		});
 		updateMenu('disconnect');
 	})
 
-	socket.on('reconnect', (att) => {
+	socket.on('reconnect', () => {
 		showNotification({ message: 'Haz recuperado la conexión con el servidor', title: 'Información', type: 'warning' })
 	})
 
+	//RECIBE LA INFORMACION ENVIADA DESDE EL SERVIDOR
 	socket.on('tell-me-to-do', (data) => {
 		const { message, title, type } = data;
-		showNotification({ message, title, type });
+		showNotification({ message, title, type, app });
 	})
 }
 
-const solicitarCredenciales = () => {
+
+//SOLICITAR CREDENCIALES AL SERVIDOR
+const solicitarCredenciales = (app) => {
 	socket.emit('solicitar-credenciales', {
 		type: 'secreto',
 		client: `client_${ip}`
-	}, (res) => {
+	}, async (res) => {
 		if (res.success) {
 			showNotification({
-				message: 'Haz recuperado la conexión', title: 'Información'
+				message: 'Haz recuperado la conexión', title: 'Información', app
 			});
 			updateMenu('connect', 'online');
 		}

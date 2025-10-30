@@ -9,6 +9,7 @@ const { closeWindows } = require('./utils/close-app');
 
 let tray;
 
+//ACTUALIZA LOS DATOS DE LA CONEXION Y LOS PERSISTE EN VARIABLES DE ENTORNO
 const handleSetConfig = async (_, data) => {
 	const { server, port } = data;
 	const command = `SETX SERVER_ADDRESS ${server} && SETX SERVER_PORT ${port}`;
@@ -16,7 +17,7 @@ const handleSetConfig = async (_, data) => {
 	const { success } = result;
 
 	if (success) {
-		initSocketConnection({ ...data, defecto: false });
+		initSocketConnection({ ...data, defecto: false, app });
 		closeWindows();
 		showMessage({ message: 'Configuración realizada correctamente' });
 	} else dialog.showErrorBox('Error', 'Error al realizar la configuración')
@@ -24,7 +25,7 @@ const handleSetConfig = async (_, data) => {
 	return success;
 }
 
-app.setAppUserModelId(process.env.USER_MODEL_ID || 'Notification Application');
+app.setAppUserModelId(process.env.USER_MODEL_ID || 'gilbertbv.notification.app');
 app.whenReady()
 	.then(() => checkIfAsSingleApp(app))
 	.then(() => ipcMain.handle('set-config', handleSetConfig))
